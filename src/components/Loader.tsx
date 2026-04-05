@@ -3,37 +3,21 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+const lines = [
+  { text: 'Markets move in seconds.', delay: 0.2 },
+  { text: "Decisions shouldn't lag.", delay: 0.9 },
+  { text: 'Meet Clair.', delay: 1.6, accent: true },
+]
+
 export default function Loader({ onComplete }: { onComplete: () => void }) {
-  const [progress, setProgress] = useState(0)
+  const [phase, setPhase] = useState<'intro' | 'name'>('intro')
   const [done, setDone] = useState(false)
 
   useEffect(() => {
-    let current = 0
-    const speeds = [
-      { target: 30, delay: 20 },
-      { target: 65, delay: 35 },
-      { target: 85, delay: 50 },
-      { target: 100, delay: 25 },
-    ]
-
-    let segIdx = 0
-    const tick = () => {
-      if (segIdx >= speeds.length) return
-      const seg = speeds[segIdx]
-      if (current >= seg.target) {
-        segIdx++
-        if (segIdx < speeds.length) setTimeout(tick, 200)
-        else {
-          setTimeout(() => setDone(true), 400)
-          setTimeout(() => onComplete(), 1200)
-        }
-        return
-      }
-      current += 1
-      setProgress(current)
-      setTimeout(tick, seg.delay)
-    }
-    setTimeout(tick, 300)
+    const t1 = setTimeout(() => setPhase('name'), 3000)
+    const t2 = setTimeout(() => setDone(true), 4200)
+    const t3 = setTimeout(() => onComplete(), 4800)
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
   }, [onComplete])
 
   return (
@@ -41,119 +25,152 @@ export default function Loader({ onComplete }: { onComplete: () => void }) {
       {!done ? (
         <motion.div
           key="loader"
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-bg"
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
+          style={{ background: '#06080f' }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
         >
-          {/* Abstract avatar / sigil */}
-          <motion.div
-            className="relative mb-16"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              {/* Outer rotating ring */}
-              <motion.circle
-                cx="60" cy="60" r="54"
-                stroke="rgba(232,213,176,0.15)"
-                strokeWidth="0.5"
-                strokeDasharray="8 4"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                style={{ transformOrigin: '60px 60px' }}
-              />
-              {/* Inner counter-rotating ring */}
-              <motion.circle
-                cx="60" cy="60" r="42"
-                stroke="rgba(232,213,176,0.1)"
-                strokeWidth="0.5"
-                strokeDasharray="4 8"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
-                style={{ transformOrigin: '60px 60px' }}
-              />
-              {/* Core shape — abstract geometric sigil */}
-              <motion.path
-                d="M60 18 L88 40 L88 80 L60 102 L32 80 L32 40 Z"
-                stroke="rgba(232,213,176,0.5)"
-                strokeWidth="0.8"
-                fill="none"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ duration: 1.5, ease: 'easeInOut' }}
-              />
-              <motion.path
-                d="M60 30 L78 44 L78 76 L60 90 L42 76 L42 44 Z"
-                stroke="rgba(232,213,176,0.3)"
-                strokeWidth="0.5"
-                fill="rgba(232,213,176,0.03)"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ duration: 1.5, delay: 0.3, ease: 'easeInOut' }}
-              />
-              {/* Center dot */}
-              <motion.circle
-                cx="60" cy="60" r="3"
-                fill="#e8d5b0"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: [0, 1.5, 1], opacity: 1 }}
-                transition={{ duration: 0.6, delay: 1 }}
-              />
-              {/* Corner accent dots */}
-              {[
-                [60, 18], [88, 40], [88, 80], [60, 102], [32, 80], [32, 40]
-              ].map(([cx, cy], i) => (
-                <motion.circle
-                  key={i}
-                  cx={cx} cy={cy} r="1.5"
-                  fill="rgba(232,213,176,0.6)"
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6 + i * 0.1, duration: 0.3 }}
-                />
-              ))}
-              {/* Cross lines */}
-              <motion.line x1="60" y1="30" x2="60" y2="90" stroke="rgba(232,213,176,0.1)" strokeWidth="0.5"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} />
-              <motion.line x1="30" y1="60" x2="90" y2="60" stroke="rgba(232,213,176,0.1)" strokeWidth="0.5"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} />
-            </svg>
-
-            {/* Glow behind sigil */}
-            <div className="absolute inset-0 rounded-full" style={{
-              background: 'radial-gradient(circle, rgba(232,213,176,0.08) 0%, transparent 70%)',
-              filter: 'blur(20px)',
+          {/* Background glow */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div style={{
+              width: 600, height: 600,
+              background: 'radial-gradient(circle, rgba(79,124,255,0.05) 0%, transparent 70%)',
+              filter: 'blur(60px)',
             }} />
-          </motion.div>
+          </div>
 
-          {/* Name */}
-          <motion.div
-            className="font-display text-xl tracking-[0.3em] text-text-secondary uppercase mb-12"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-          >
-            Alex Mercer
-          </motion.div>
+          {/* Corner marks */}
+          {['top-8 left-8', 'top-8 right-8', 'bottom-8 left-8', 'bottom-8 right-8'].map((pos, i) => (
+            <motion.div
+              key={i}
+              className={`absolute ${pos} w-5 h-5`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.2 }}
+              transition={{ delay: 0.1 + i * 0.05 }}
+              style={{
+                borderTop: pos.includes('top') ? '1px solid #4f7cff' : 'none',
+                borderBottom: pos.includes('bottom') ? '1px solid #4f7cff' : 'none',
+                borderLeft: pos.includes('left') ? '1px solid #4f7cff' : 'none',
+                borderRight: pos.includes('right') ? '1px solid #4f7cff' : 'none',
+              }}
+            />
+          ))}
 
-          {/* Progress */}
-          <motion.div
-            className="flex flex-col items-center gap-3"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-          >
-            <div className="w-[200px] h-[1px] bg-border relative overflow-hidden">
+          <AnimatePresence mode="wait">
+
+            {/* Phase 1 — Hook */}
+            {phase === 'intro' && (
               <motion.div
-                className="absolute inset-y-0 left-0 bg-accent"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <div className="font-mono text-xs text-muted tabular-nums">
-              {String(progress).padStart(3, '0')}
-            </div>
-          </motion.div>
+                key="intro"
+                className="flex flex-col items-center gap-5 text-center px-8"
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+              >
+                {lines.map((line, i) => (
+                  <motion.p
+                    key={i}
+                    className={`font-display font-light tracking-wide ${
+                      line.accent
+                        ? 'text-3xl md:text-4xl'
+                        : 'text-xl md:text-2xl text-text-secondary'
+                    }`}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: line.delay, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {line.accent ? (
+                      <span style={{
+                        background: 'linear-gradient(90deg, #4f7cff, #a5b4fc)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                      }}>
+                        {line.text}
+                      </span>
+                    ) : line.text}
+                  </motion.p>
+                ))}
+
+                <motion.div
+                  className="flex items-center gap-2 mt-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.2, duration: 0.5 }}
+                >
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4f7cff', boxShadow: '0 0 10px #4f7cff' }} />
+                  <span className="font-mono text-[10px] tracking-[0.4em] text-muted uppercase">
+                    Vansh Gupta · Portfolio
+                  </span>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4f7cff', boxShadow: '0 0 10px #4f7cff' }} />
+                </motion.div>
+              </motion.div>
+            )}
+
+            {/* Phase 2 — Name + progress */}
+            {phase === 'name' && (
+              <motion.div
+                key="name"
+                className="flex flex-col items-center gap-6"
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <motion.div
+                  className="relative"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                    <rect x="1" y="1" width="62" height="62" stroke="rgba(79,124,255,0.2)" strokeWidth="0.5" />
+                    <rect x="6" y="6" width="52" height="52" stroke="rgba(79,124,255,0.1)" strokeWidth="0.5" strokeDasharray="3 3" />
+                    <text x="32" y="43" textAnchor="middle" fill="url(#vggrad)"
+                      style={{ fontSize: 26, fontFamily: 'sans-serif', fontWeight: 300, letterSpacing: 2 }}>
+                      VG
+                    </text>
+                    <defs>
+                      <linearGradient id="vggrad" x1="0" y1="0" x2="64" y2="0" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stopColor="#4f7cff" />
+                        <stop offset="100%" stopColor="#a5b4fc" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    background: 'radial-gradient(circle, rgba(79,124,255,0.15) 0%, transparent 70%)',
+                    filter: 'blur(15px)',
+                  }} />
+                </motion.div>
+
+                <motion.div
+                  className="font-mono text-[10px] tracking-[0.5em] text-muted uppercase"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  Loading portfolio
+                </motion.div>
+
+                <motion.div
+                  className="w-[140px] h-[1px] relative overflow-hidden"
+                  style={{ background: 'rgba(79,124,255,0.1)' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <motion.div
+                    className="absolute inset-y-0 left-0"
+                    style={{ background: 'linear-gradient(90deg, #4f7cff, #a5b4fc)' }}
+                    initial={{ width: '0%' }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: 1, ease: 'easeInOut', delay: 0.3 }}
+                  />
+                </motion.div>
+              </motion.div>
+            )}
+
+          </AnimatePresence>
         </motion.div>
       ) : null}
     </AnimatePresence>
