@@ -66,13 +66,6 @@ export default function Contact() {
             <span className="font-mono text-[9px] tracking-[0.25em] uppercase" style={{ color: '#333' }}>X / Twitter</span>
             <span className="font-body text-xs transition-colors duration-300 group-hover:text-text" style={{ color: '#555' }}>@gupta43938</span>
           </a>
-           href="https://github.com/VanshxGit-hub"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="group flex items-center gap-2"
-
-  <span className="font-mono text-[9px] tracking-[0.25em] uppercase" style={{ color: '#333' }}>GitHub</span>
-  <span className="font-body text-xs transition-colors duration-300 group-hover:text-text" style={{ color: '#555' }}>VanshxGit-hub</span>
           <div className="font-mono text-[9px] tracking-[0.3em]" style={{ color: '#333' }}>
             © 2026 Vansh Gupta
           </div>
