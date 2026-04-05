@@ -17,14 +17,14 @@ export default function About() {
 
           <Reveal delay={0.1}>
             <h2 className="font-display font-extralight text-4xl md:text-5xl mb-10" style={{ lineHeight: 1.15, letterSpacing: '-0.02em' }}>
-              I trade markets<br />and build products.
+              Hey,Everyone
             </h2>
           </Reveal>
 
           <Reveal delay={0.2}>
             <p className="font-body leading-relaxed text-sm mb-6 max-w-md" style={{ color: '#666' }}>
               I'm Vansh — an entrepreneur and stock market enthusiast who started trading
-              derivatives at 17. After 1.5 years in F&O markets, I saw firsthand how
+              derivatives at 16. After 1.5 years in F&O markets, I saw firsthand how
               paralysing it is to make decisions without a clear edge.
             </p>
           </Reveal>
@@ -32,7 +32,7 @@ export default function About() {
           <Reveal delay={0.25}>
             <p className="font-body leading-relaxed text-sm mb-10 max-w-md" style={{ color: '#666' }}>
               That led me to build Clair — an AI-powered trading assistant. I just wrapped
-              my Class 12 boards and I'm going all in on the intersection of AI and
+              my Class 12 boards and I'm going with the intersection of AI and
               financial markets.
             </p>
           </Reveal>

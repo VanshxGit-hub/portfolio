@@ -68,7 +68,7 @@ export default function Contact() {
           </a>
 
           <div className="font-mono text-[9px] tracking-[0.3em]" style={{ color: '#333' }}>
-            © 2025 Vansh Gupta
+            © 2026 Vansh Gupta
           </div>
         </div>
       </Reveal>

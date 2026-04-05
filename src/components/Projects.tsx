@@ -11,25 +11,9 @@ const projects = [
     problem: 'Retail traders face decision paralysis and surface-level analysis — no real edge.',
     built: 'An AI assistant delivering real-time technical analysis and trade insights, cutting through noise so traders can act with conviction.',
     stack: ['AI / LLM', 'Technical Analysis', 'Real-time Data'],
-    year: '2024–25',
+    year: '2026-present',
     status: 'In development',
     featured: true,
-  },
-  {
-    title: 'Options Flow',
-    subtitle: 'Derivative Trade Tracker',
-    problem: 'F&O traders lack structured journaling and post-trade analysis.',
-    built: 'Personal trade tracking with P&L analytics across 1.5 years of derivative trading.',
-    stack: ['Python', 'Data Analysis'],
-    year: '2023',
-  },
-  {
-    title: 'Market Scanner',
-    subtitle: 'Technical Signal Screener',
-    problem: 'Scanning hundreds of stocks for setups manually is slow and error-prone.',
-    built: 'Automated scanner flagging technical breakouts across NSE-listed equities.',
-    stack: ['Python', 'TA-Lib', 'NSE API'],
-    year: '2024',
   },
 ]
 
