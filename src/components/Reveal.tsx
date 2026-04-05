@@ -14,26 +14,12 @@ export function Reveal({ children, delay = 0, className = '', direction = 'up' }
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
-  const variants = {
-    hidden: {
-      opacity: 0,
-      y: direction === 'up' ? 40 : 0,
-      x: direction === 'left' ? -30 : 0,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      x: 0,
-    },
-  }
-
   return (
     <motion.div
       ref={ref}
       className={className}
-      variants={variants}
-      initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
+      initial={{ opacity: 0, y: direction === 'up' ? 30 : 0, x: direction === 'left' ? -20 : 0 }}
+      animate={inView ? { opacity: 1, y: 0, x: 0 } : {}}
       transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
@@ -43,9 +29,9 @@ export function Reveal({ children, delay = 0, className = '', direction = 'up' }
 
 export function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-4 mb-4">
-      <div className="h-[1px] w-8 bg-accent opacity-40" />
-      <span className="font-mono text-[10px] tracking-[0.35em] text-accent-dim uppercase">
+    <div className="flex items-center gap-4 mb-6">
+      <div className="h-[1px] w-6" style={{ background: '#333' }} />
+      <span className="font-mono text-[9px] tracking-[0.4em] uppercase" style={{ color: '#444' }}>
         {children}
       </span>
     </div>
