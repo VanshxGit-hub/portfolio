@@ -58,7 +58,7 @@ export default function About() {
               { value: '1.5y', label: 'Live derivative trading' },
               { value: 'F&O', label: 'Options & futures' },
               { value: 'Clair', label: 'Current project' },
-              { value: '2025', label: 'Building now' },
+              { value: '2026', label: 'Building now' },
             ].map(({ value, label }) => (
               <div key={label} className="border p-5" style={{ borderColor: '#1a1a1a' }}>
                 <div className="font-display text-2xl font-light mb-1">{value}</div>
